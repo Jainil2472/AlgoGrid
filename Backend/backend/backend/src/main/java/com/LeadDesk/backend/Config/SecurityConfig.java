@@ -1,5 +1,6 @@
 package com.LeadDesk.backend.Config;
 
+import org.springframework.beans.factory.annotation.Value;
 import com.LeadDesk.backend.Service.DatabaseUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,8 @@ public class SecurityConfig {
 
     private final DatabaseUserDetailsService userDetailsService;
 
+    @Value("${app.cors.allowed-origin:http://localhost:5173}")
+private String frontendUrl;
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
@@ -84,7 +87,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of(frontendUrl));
         configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Content-Type", "Authorization"));
         configuration.setAllowCredentials(true);
